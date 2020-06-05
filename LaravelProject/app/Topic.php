@@ -8,7 +8,7 @@ use App\Category;
 class Topic extends Model {
 
     protected $fillable = ['title', 'description', "category_id"];
-
+    public $isUserLiked = false;
     public function category()
     {
         return $this->belongsTo('App\Category');

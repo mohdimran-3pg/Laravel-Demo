@@ -25,6 +25,19 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('validate-like', function($user, $likes) {
+
+            $isUserLiked = false;
+            foreach($likes as $like) {
+
+                if ($like->user->id == $user->id) {
+                    $isUserLiked = true;
+                    break;
+                }
+            }
+            return $isUserLiked;
+        });
+
         //
     }
 }

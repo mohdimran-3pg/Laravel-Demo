@@ -13,9 +13,9 @@
             <label class="control-label col-sm-2">Category:</label>
             <div class="col-sm-10">
               <select name="category_id" class="form-control">
-                <option value="0">--Select Category--<option>
+                <option value="0">--Select Category--</option>
                 @foreach($categories as $category)
-                  <option value="{{ $category ->id}}">{{ $category->name}}<option>
+                  <option value="{{ $category ->id}}" {{($category ->id == old("category_id") ? "selected" : "")}}>{{ $category->name}}</option>
                 @endforeach  
               </select>
             </div>

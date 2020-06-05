@@ -56,10 +56,6 @@ class TopicController extends Controller
     public function SaveLike($id)
     {
 
-       if(!Auth::check()) {
-            return redirect()->back();
-       } 
-
        $user = Auth::user();
        $user->id;
        
@@ -72,6 +68,18 @@ class TopicController extends Controller
         return redirect()->back();
     }
 
+    public function DeleteLike($id)
+    {
+
+       $user = Auth::user();
+       $like = Like::where([
+           ["topic_id", "=", $id],
+           ["user_id", "=", $user->id]
+           ]);
+       $like->delete();
+       return redirect()->back();
+    }
+
     public function AddSolution($id)
     {
         $objTopic = Topic::find($id);
@@ -81,11 +89,7 @@ class TopicController extends Controller
     public function SaveSolution(Request $request, \Illuminate\Validation\Factory $validator)
     {
 
-       // Auth::user()->id;
-
-        
-
-        $validation = $validator->make($request->all(), [
+       $validation = $validator->make($request->all(), [
             "id" => "required",
             "solution" => "required"
         ]);
@@ -119,8 +123,26 @@ class TopicController extends Controller
     {
 
         $topic = Topic::find($id);
-        $solutions = Solution::find($id);
-        return view("detail", ["topic"=> $topic, "solutions"=>$topic->solutions, "name"=>$topic->user->name]);
+        $solutions = array();
+        if (count($topic->solutions) > 0) {
+            $solutions = Solution::find($id)->orderBy("created_at", "DESC")->get();
+
+            foreach($solutions as $solution) {
+
+                $solution->isUserLikedTopic = $this->isUserLikedTopic($solution->likes);
+
+            }
+        }
+
+        $user_id = 0;
+        $user = Auth::user();
+
+        if ($user != null) {
+            $user_id = $user->id;
+        }
+        
+        $topic->isUserLiked = $this->isUserLikedTopic($topic->likes);;
+        return view("detail", ["topic"=> $topic, "solutions"=>$solutions, "name"=>$topic->user->name, "user_id" => $user_id]);
     }
 
     public function getTopics()
@@ -128,5 +150,30 @@ class TopicController extends Controller
         $topic = new Topic();
         $topics = $topic->getTopics();
         return view("mytopics", ["topics" => $topics]);
+    }
+
+    public function SaveSolutionLike($id)
+    {
+        $user = Auth::user();
+        
+        $solution = Solution::find($id);
+
+        $like = new Like();
+        $like->user_id = $user->id;
+        $solution->likes()->save($like);
+        $user->likes()->save($like);
+
+        return redirect()->back();
+    }
+
+    public function DeleteSolutionLike($id)
+    {
+        $user = Auth::user();
+        $like = Like::where([
+            ["solution_id", "=", $id],
+            ["user_id", "=", $user->id]
+            ]);
+        $like->delete();
+        return redirect()->back();
     }
 }

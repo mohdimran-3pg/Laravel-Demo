@@ -7,8 +7,13 @@
         <p class="h1">{{$topic["title"]}}</p>
         <p class="h4">{{$topic["description"]}}</p>
         <p>Created On: <i>{{$topic["created_at"]}}</i><br/>
-           Posted By: <i>{{$name}}</i><br/>
-           <span>{{count($topic->likes)}} | <a href="/user/{{$topic["id"]}}/like">Like</a></span>
+          <img src="{{asset('/images/'.$topic->user->avatar)}}" class="profile-img"/> <i>{{$name}}</i><br/>
+           @if($topic->isUserLiked)
+                <span>{{count($topic->likes)}} | <a href="/user/{{$topic["id"]}}/unlike">UnLike</a></span>
+            @else
+                <span>{{count($topic->likes)}} | <a href="/user/{{$topic["id"]}}/like">Like</a></span>
+            @endif
+            
         </p>
         
         <p>&nbsp;</p>
@@ -19,7 +24,14 @@
             <div class="card">
                 
                 <div class="card-body">{{$solution["solution"]}}</div>
-                <span style="font-size: 11px; float: right;">Posted By <i>{{$solution->user->name}}</i></span><br/>
+                @if($solution->isUserLikedTopic == false)
+                  <span style="font-size: 11px; float: left;"> <a href="/user/{{$solution->id}}/solution/like">{{count($solution->likes)}} | Like</a> </span>
+                @else
+                  <span style="font-size: 11px; float: left;"> <a href="/user/{{$solution->id}}/solution/unlike">{{count($solution->likes)}} | UnLike</a> </span>
+                @endif 
+                
+                <span style="font-size: 11px; float: right;"><img class="profile-img" src="{{asset('/images/'.$solution->user->avatar)}}" /> <i> <a href="{{route('profile.view', ['id' => $solution->user->id])}}">{{$solution->user->name}}</a> </i></span><br/>
+                <br />
                 <span style="font-size: 11px; float: right;">Crated On <i>{{$solution["created_at"]}}</i></span>
                 <hr>
             </div>
@@ -30,7 +42,8 @@
         
 
         <div style="margin-top: 20px;">
-            
+          @include('inc.error')
+          @include('inc.success')
             <form class="form-horizontal" action="/user/solution" method="POST">
                 @csrf
               <div class="form-group">
