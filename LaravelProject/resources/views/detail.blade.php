@@ -3,7 +3,8 @@
 <div class="w3-top" style="position: static;">
     @include('inc.header')
     <div class="container">
-        
+      @include('inc.error')
+      @include('inc.success')
         <p class="h1">{{$topic["title"]}}</p>
         <p class="h4">{{$topic["description"]}}</p>
         <p>Created On: <i>{{$topic["created_at"]}}</i><br/>
@@ -42,8 +43,6 @@
         
 
         <div style="margin-top: 20px;">
-          @include('inc.error')
-          @include('inc.success')
             <form class="form-horizontal" action="/user/solution" method="POST">
                 @csrf
               <div class="form-group">
