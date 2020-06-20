@@ -3,6 +3,7 @@
 <!-- Navbar (sit on top) -->
 <div class="w3-top" style="position: static;">
     @include('inc.header')
+    @include('inc.error')
     @include('inc.success')
     <div class="container">
         <div>
@@ -16,7 +17,7 @@
                         <span>{{count($topic->likes)}} Likes</span>
                     </div>
                     <div style="float: left;">
-                        <a class="btn btn-primary" href="user/edit/{{$topic["id"]}}">Edit</a>
+                        <a class="btn btn-primary" href="/user/edit/{{$topic["id"]}}">Edit</a>
                     </div>    
                     <div style="float: left; margin-left: 10px;">
                         <form method="POST" action="/user/delete">

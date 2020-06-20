@@ -14,12 +14,37 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+/*
+Route::middleware('auth:api', function () {
+     
+});*/
+
+Route::middleware('auth:api')->post('createTopic', "ApiController@createTopic");
+Route::middleware('auth:api')->post('SaveSolution', "ApiController@SaveSolution");
+Route::middleware('auth:api')->get('deleteTopic/{id}', "ApiController@deleteTopic");
+
+Route::middleware('auth:api')->get('SaveLike/{id}', "ApiController@SaveLike");
+Route::middleware('auth:api')->get('DeleteLike/{id}', "ApiController@DeleteLike");
+
+Route::middleware('auth:api')->get('SaveSolutionLike/{id}', "ApiController@SaveSolutionLike");
+Route::middleware('auth:api')->get('DeleteSolutionLike/{id}', "ApiController@DeleteSolutionLike");
 
 Route::post('login',  "ApiController@login");
 Route::post('register',  "ApiController@register");
-
+Route::get('topic/{id}', "ApiController@topic");
 Route::get('topics', "ApiController@topics");
-Route::get('topic/{id}', ["uses"=>"ApiController@topic"]);
+
+
+Route::post('user/forgot_password', 'UserApiController@forgot_password');
+Route::post('user/login', 'UserApiController@login');
+Route::resource('user', 'UserApiController');
+
+Route::group(['middleware' => 'auth:api'], function() {
+
+    Route::resource('question', 'QuestionApiController', ['except' => ['index', 'show']])->middleware('auth:api');
+    Route::resource('answer', 'AnswerApiController', ['only' => ['destroy']])->middleware('auth:api');
+
+});
+
+Route::resource('questionlist', 'QuestionListApiController', ['only' => ['index', 'show']]);
+                

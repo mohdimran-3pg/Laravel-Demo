@@ -9,7 +9,7 @@ use App\Like;
 use App\Solution;
 use Auth;
 use App\Category;
-
+use Gate;
 class TopicController extends Controller
 {
     public function SaveTopic(Request $request, \Illuminate\Validation\Factory $validator)
@@ -39,18 +39,37 @@ class TopicController extends Controller
 
     public function UpdateTopic(Request $request)
     {
-            $objTopic =  Topic::find($request->id);
+        $objTopic =  Topic::find($request->id);
+        if(Gate::denies('validate-delete-topic', $objTopic->user->id) == false) {
+            
             $objTopic->title  = $request->title;
             $objTopic->description  = $request->description;
             $objTopic->save();
             return redirect('/user/edit/'.$request->id)->with('success', 'Topic updated successfully.<i>'. $objTopic->title.'</i>');
+        } else {
+            return redirect()->back()->with('error', "You can not update other user's Topic updated.<i>");
+        }
+
+            
     }
 
     public function deleteTopic(Request $request)
     {
         $objTopic =  Topic::find($request->id);
-        $objTopic->delete();
-        return redirect('/')->with('success', 'Topic deleted successfully.<i>'. $objTopic->title.'</i>');
+        if(Gate::denies('validate-delete-topic', $objTopic->user->id) == false) {
+        
+            $totalSolution = count($objTopic->solutions);
+             
+            if ($totalSolution > 0) {
+                return redirect()->back()->with('error', 'You can not delete the Topic, it has '. $totalSolution. " answers");
+            } else {
+                $objTopic->delete();
+                return redirect()->back()->with('success', 'Topic deleted successfully.<i>'. $objTopic->title.'</i>');
+            }
+        } else {
+            return redirect('/')->withError('You can not delete others topic');
+        }
+        
     }
 
     public function SaveLike($id)
@@ -125,7 +144,7 @@ class TopicController extends Controller
         $topic = Topic::find($id);
         $solutions = array();
         if (count($topic->solutions) > 0) {
-            $solutions = Solution::find($id)->orderBy("created_at", "DESC")->get();
+            $solutions = $topic->solutions()->orderBy("created_at", "DESC")->get();
 
             foreach($solutions as $solution) {
 

@@ -14,7 +14,20 @@
                 <li><a class="w3-bar-item w3-button w3-hide-small" href="{{ route('register') }}">{{ __('Register') }}</a></li>
         @endif
     @else
-            <li><a id="navbarDropdown" class="w3-bar-item w3-button w3-hide-small dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+
+    <li><a href="{{route('user.add')}}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+      Add Question  
+  </a>
+  
+</li>
+
+    <li><a href="/profile/mytopics/" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+      My Questions  
+  </a>
+  
+</li>
+
+            <li><a id="navbarDropdown" class="w3-bar-item w3-button w3-hide-small dropdown-toggle" href="{{route('profile.display')}}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 {{ Auth::user()->name }} <span class="caret"></span>
             </a>
             

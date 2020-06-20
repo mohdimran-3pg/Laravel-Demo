@@ -26,7 +26,7 @@ class Topic extends Model {
 
     public function getTopics()
     {
-        return Topic::paginate(5);
+        return Topic::orderBy("created_at", "DESC")->paginate(5);
     }
 
     public function addTopic($title, $desc, $category_id)

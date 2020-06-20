@@ -6,7 +6,7 @@ use App\Topic;
 use Gate;
 use Auth;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\ApiController;
 class IndexController extends Controller
 {
     public function Index()
@@ -18,6 +18,14 @@ class IndexController extends Controller
             $t->isUserLiked = $this->isUserLikedTopic($t->likes);;
         }
         
+
+         /*
+        $client = new \GuzzleHttp\Client();
+        $request = $client->get('http://127.0.0.1:8001/api/topics');
+        $response = $request->getBody();
+
+        print_r($response);*/
+
         return view("index", ["topics" => $topics, "loggedInUser" => $loggedInUser]);
     }
 

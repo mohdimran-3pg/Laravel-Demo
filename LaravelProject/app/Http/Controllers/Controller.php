@@ -17,6 +17,7 @@ class Controller extends BaseController
 
         $isUserLiked = false;
         $loggedInUser = Auth::user();
+        
 
         if ($loggedInUser == null) {
 

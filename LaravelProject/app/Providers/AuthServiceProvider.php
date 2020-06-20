@@ -39,6 +39,11 @@ class AuthServiceProvider extends ServiceProvider
             return $isUserLiked;
         });
 
+        Gate::define('validate-delete-topic', function($user, $topic_user_id) {
+
+            return $topic_user_id == $user->id;
+        });
+
         //
     }
 }

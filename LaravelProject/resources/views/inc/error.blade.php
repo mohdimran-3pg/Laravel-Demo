@@ -11,3 +11,13 @@
     </div>
 </div>
 @endif
+
+@if(Session::has('error'))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    {!! Session::get('error') !!}
+                </div>
+            </div>
+        </div>
+        @endif

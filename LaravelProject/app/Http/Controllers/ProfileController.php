@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Auth;
 use Validator;
 use App\User; 
-
+use App\Topic;
+use App\Solution;
 class ProfileController extends Controller
 {
     public function UpdateProfile(Request $request)
@@ -64,5 +66,14 @@ class ProfileController extends Controller
     {
         $user = User::find($id);
         return view('profiledetail', ["user" => $user]);
+    }
+
+    public function MyTopics()
+    {
+
+        $loggedInUser = Auth::user();
+        $topics = Topic::where([["user_id", "=" , $loggedInUser->id]])->paginate(5);
+        
+        return view("mytopics", ["topics" => $topics, "loggedInUser" => $loggedInUser]);
     }
 }

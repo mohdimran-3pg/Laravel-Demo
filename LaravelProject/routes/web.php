@@ -60,6 +60,8 @@ Route::group(['prefix' => 'profile'], function () {
     Route::get('viewprofile/{id}', ["uses"=>"ProfileController@ViewProfile", "as"=>"profile.view"]);
     Route::get('display', ["uses"=>"ProfileController@Display", "as"=>"profile.display", "middleware" => "auth"]);
     Route::post('update', ["uses"=>"ProfileController@UpdateProfile", "as"=>"profile.update", "middleware" => "auth"]);
+    Route::get('mytopics', ["uses"=>"ProfileController@MyTopics", "as"=>"profile.mytopics", "middleware" => "auth"]);
+    
 });
 
 Auth::routes();

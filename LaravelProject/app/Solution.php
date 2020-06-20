@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Solution extends Model
 {
     public $isUserLiked;
+    public $posted_by;
 
     public function topic()
     {
