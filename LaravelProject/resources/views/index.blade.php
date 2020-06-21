@@ -13,20 +13,21 @@
                 <li class="list-group-item" style="height: 150px;">
                     <div>
                         <a href="/user/{{$topic["id"]}}/detail">{{$topic["title"]}}</a><br />
-                        <span>Created on: {{date("d-m-Y h:i A", strtotime($topic["created_at"]))}}</span><br/>
-                        <span><img src="{{asset('/images/'.$topic->user->avatar)}}" class="profile-img"/> <a href="{{route('profile.view', ['id' => $topic->user->id])}}">{{$topic->user->name}}</a></span><br/>
+                        <span>Created on: {{date("d-m-Y h:i A", strtotime($topic["topic_date"]))}}</span><br/>
+                        <span><img src="{{asset('/images/'.$topic['avatar'])}}" class="profile-img"/> <a href="{{route('profile.view', ['id' => $topic['user_id']])}}">{{$topic["name"]}}</a></span><br/>
 
-                        @if($topic->isUserLiked)
-                            <span>{{count($topic->likes)}} | <a href="/user/{{$topic["id"]}}/unlike">UnLike</a></span>
+                        @if($topic["isUserLiked"])
+                            <span>{{$topic["TOTAL_LIKE"]}} | <a href="/user/{{$topic["id"]}}/unlike">UnLike</a></span>
                         @else
                             @if($loggedInUser != null)
-                                <span>{{count($topic->likes)}} | <a href="/user/{{$topic["id"]}}/like">Like</a></span>
+                                <span>{{$topic["TOTAL_LIKE"]}} | <a href="/user/{{$topic["id"]}}/like">Like</a></span>
                             @else
-                                <span>{{count($topic->likes)}} | <a href="/login">Like</a></span>
+                                <span>{{$topic["TOTAL_LIKE"]}} | <a href="/login">Like</a></span>
                             @endif
                             
                         @endif
-                        
+                        <br />
+                        <span><i>{{$topic["TOTAL_ANS"]}}</i> Answered</a></span>
                     </div>
                 </li>
                 @endforeach
@@ -37,7 +38,7 @@
                 @endif
                </ul>
         </div>
-        <div class="clearfix">{{$topics->links()}}</div>
+        {{--- <div class="clearfix">{{$topics->links()}}</div> --}}
     </div>
        
 </div>  
